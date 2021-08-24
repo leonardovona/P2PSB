@@ -1,0 +1,179 @@
+<!--
+  index.html
+  Leonardo Vona
+  545042  
+-->
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Leonardo Vona">
+  <title>Mayor or Sayonara</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <!-- Popper -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+
+  <!-- Bootstrap -->
+  <link href="./css/assets/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+
+  <!-- Custom CSS -->
+  <link href="./css/index.css" rel="stylesheet">
+
+  <!-- Web3 -->
+  <script src="./dist/web3.min.js"></script>
+  <script src="./dist/truffle-contract.js"></script>
+
+  <!-- App -->
+  <script src="./js/app.js"></script>
+</head>
+
+<body>
+  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <div class="navbar-brand col-md-3 col-lg-2 me-0 px-3">Mayor or sayonara</div>
+    <span class="navbar-text pr-5" id="accountId"></span> <!-- Displays the account address-->
+  </header>
+
+  <!--col-md-0 ms-sm-auto px-md-4-->
+  <main class="container-fluid px-md-4">
+    <div class="row">
+      <!-- Candidates column -->
+      <div class="col-2">
+        <div class="row pt-3 pb-2 mb-3 border-bottom">
+          <h2 class="h2">Candidates</h2>
+        </div>
+
+        <div class="row bg-light p-3 rounded">
+          <h5 id="deposit">Deposit</h5>
+          <!-- Form for soul deposit -->
+          <form>
+            <div class="mb-3">
+              <label for="deposit_soul" class="form-label">Soul to deposit</label>
+              <input type="number" id="deposit_soul" name="deposit_soul" class="form-control" required min="0">
+            </div>
+
+            <input type="button" id="deposit_button" class="btn btn-primary b-3" value="Deposit"><br><br>
+          </form>
+        </div>
+      </div>
+
+      <!-- Voters column -->
+      <div class="col-6 ps-4">
+        <div class="row pt-3 pb-2 mb-3 border-bottom">
+          <h2 class="h2">Voters</h2>
+        </div>
+
+        <div class="row border-left">
+          <!-- Form for casting an envelope -->
+          <div class="col mx-3 bg-light p-3 rounded">
+            <h5 id="cast_envelope">Cast envelope</h5>
+
+            <form id="form_cast_envelope">
+              <div class="mb-3">
+                <label for="cast_sigil" class="form-label">Sigil</label>
+                <input type="number" id="cast_sigil" name="cast_sigil" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="cast_candidate" class="form-label">Candidates</label>
+                <select id="cast_candidate" name="cast_candidate" class="form-select" required></select>
+              </div>
+
+              <div class="mb-3">
+                <label for="cast_souls" class="form-label">Souls</label>
+                <input type="number" id="cast_souls" name="cast_souls" class="form-control" required min="0">
+              </div>
+
+              <input type="button" id="cast_envelope_button" class="btn btn-primary b-3" value="Cast envelope"><br><br>
+
+              <!-- The output envelope is displayed here-->
+              <label for="computed_envelope" class="form-label">Output envelope</label>
+              <input type="text" id="computed_envelope" name="computed_envelope" class="form-control" readonly>
+            </form>
+          </div>
+
+          <!-- Form for opening an envelope -->
+          <div class="col mx-3 bg-light p-3 rounded">
+            <h5 id="open_envelope-form">Open envelope</h5>
+
+            <form>
+              <div class="mb-3">
+                <label for="open_sigil" class="form-label">Sigil</label>
+                <input type="number" id="open_sigil" name="open_sigil" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="open_candidate" class="form-label">Candidates</label>
+                <select id="open_candidate" name="open_candidate" class="form-select" required></select>
+              </div>
+
+              <div class="mb-3">
+                <label for="open_souls" class="form-label">Souls</label>
+                <input type="number" id="open_souls" name="open_souls" class="form-control" required min="0">
+              </div>
+
+              <input type="button" id="open_envelope_button" class="btn btn-primary" value="Open envelope">
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Management column -->
+      <div class="col-4 ps-4">
+        <div class="row pt-3 pb-2 mb-3 border-bottom">
+          <h2 class="h2">Management</h2>
+        </div>
+
+        <!-- Election infos are displaued into this column -->
+        <div class="row border-left me-3">
+          <div class="container bg-light p-3 ms-3 rounded ">
+            <div class="mb-3">
+              <label for="escrow" class="form-label">Escrow</label>
+              <input type="text" id="escrow" name="escrow" class="form-control" disabled>
+            </div>
+
+            <div class="mb-3">
+              <label for="quorum" class="form-label">Quorum</label>
+              <input type="text" id="quorum" name="quorum" class="form-control" disabled>
+            </div>
+
+            <div class="mb-3">
+              <label for="envelopes_cast" class="form-label">Envelopes cast</label>
+              <input type="text" id="envelopes_cast" name="envelopes_cast" class="form-control" disabled>
+            </div>
+
+            <div class="mb-3">
+              <label for="envelopes_opened" class="form-label">Envelopes Opened</label>
+              <input type="text" id="envelopes_opened" name="envelopes_opened" class="form-control" disabled>
+            </div>
+
+            <div class="mb-3">
+              <label for="candidates_deposited" class="form-label">Candidates that have deposited</label>
+              <input type="text" id="candidates_deposited" name="candidates_deposited" class="form-control" disabled>
+            </div>
+
+            <input type="button" class="btn btn-primary" id="mayor_or_sayonara_button" value="Mayor or sayonara">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Area dedicated to show messages derived from the execution of contract's functions -->
+    <div class="row mt-4" id="message_area"></div>
+  </main>
+</body>
+
+</html>
